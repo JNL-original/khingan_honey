@@ -34,6 +34,7 @@ class _BlogSectionState extends State<BlogSection>{
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         _videoPart(context: context),
+        const SizedBox(height: 50,),
         _textPart(context: context),
       ],
     );
