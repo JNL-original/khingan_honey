@@ -184,10 +184,15 @@ class SingleVideoPlayerState extends State<_SingleVideoPlayer>{
       allowFullScreen: true,
       allowMuting: true,
       allowPlaybackSpeedChanging: true,
+
       aspectRatio: _videoPlayerController.value.aspectRatio,
+      placeholder: const Center(child: CircularProgressIndicator()),
     );
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
+
 
 
   @override
@@ -199,7 +204,7 @@ class SingleVideoPlayerState extends State<_SingleVideoPlayer>{
 
   @override
   Widget build(BuildContext context) {
-    if(_chewieController!= null && _chewieController!.videoPlayerController.value.isInitialized){
+    if(_chewieController!= null){
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: MouseRegion(
