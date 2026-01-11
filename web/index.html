@@ -1,38 +1,98 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <!--
-    If you are serving your web app in a path other than the root, change the
-    href value below to reflect the base path you are serving from.
-
-    The path provided below has to start and end with a slash "/" in order for
-    it to work correctly.
-
-    For more details:
-    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
-
-    This is a placeholder for base href that will be replaced by the value of
-    the `--base-href` argument provided to `flutter build`.
-  -->
   <base href="$FLUTTER_BASE_HREF">
-
   <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Натуральный таёжный мёд из Архаринских лесов">
-
-  <!-- iOS meta tags & icons -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="learning_flutter">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
-
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
-
   <title>Хинганский мёд</title>
-  <link rel="manifest" href="manifest.json">
+
+  <style>
+    /* Черный фон */
+    body {
+      background-color: #000000;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    #loading-indicator {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 9999;
+      background-color: #000000;
+      /* Плавный переход для прозрачности */
+      transition: opacity 0.8s ease-out;
+      opacity: 1;
+    }
+
+    .loader-icon {
+      width: clamp(180px, 25vw, 450px);
+      height: auto;
+      animation: pulse 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.05); opacity: 1; }
+    }
+
+    .loader-text {
+      margin-top: 30px;
+      font-family: sans-serif;
+      color: #ffffff;
+      font-size: 1.5rem;
+      letter-spacing: 2px;
+    }
+
+    /* Класс, который мы добавим через JS для исчезновения */
+    .fade-out {
+      opacity: 0 !important;
+      pointer-events: none;
+    }
+  </style>
 </head>
 <body>
-  <script src="flutter_bootstrap.js" async></script>
-</body>https://khingan.jnl-x.run/
+<div id="loading-indicator">
+  <img src="icons/Icon-192.png" class="loader-icon" alt="Loading...">
+  <div class="loader-text">Загрузка...</div>
+</div>
+
+<script>
+  window.addEventListener('load', function() {
+    var observer = new MutationObserver(function(mutations) {
+      mutations.forEach(function(mutation) {
+        if (mutation.addedNodes.length > 0) {
+          for (var i = 0; i < mutation.addedNodes.length; i++) {
+            var node = mutation.addedNodes[i];
+            if (node.tagName === 'FLT-RENDERER' || node.tagName === 'FLUTTER-VIEW') {
+
+              var loader = document.getElementById('loading-indicator');
+              if (loader) {
+                // 1. Делаем прозрачным
+                loader.classList.add('fade-out');
+
+                // 2. Полностью удаляем из DOM через 800мс (время совпадает с CSS transition)
+                setTimeout(function() {
+                  loader.remove();
+                }, 800);
+              }
+
+              observer.disconnect();
+            }
+          }
+        }
+      });
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
+  });
+</script>
+
+<script src="flutter_bootstrap.js" async></script>
+</body>
 </html>
