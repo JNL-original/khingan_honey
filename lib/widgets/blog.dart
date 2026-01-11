@@ -117,7 +117,8 @@ class _BlogSectionState extends State<BlogSection>{
                     itemBuilder: (context, index, pageViewIndex) {
                       return _SingleVideoPlayer(
                           key: ValueKey("video_$index"),
-                          videoName: _BlogData.blogs[index][2]);
+                          videoUri: Uri.parse("https://khingan.jnl-x.run/assets/assets/videos/" + _BlogData.blogs[index][2])
+                      );
                     },
                   ),
                 ),
@@ -148,8 +149,8 @@ class _BlogSectionState extends State<BlogSection>{
 }
 
 class _SingleVideoPlayer extends StatefulWidget{
-  const _SingleVideoPlayer({super.key, required String videoName,}) : videoUrl = "assets/videos/" + videoName;
-  final String videoUrl;
+  const _SingleVideoPlayer({super.key, required this.videoUri,});
+  final Uri videoUri;
   @override
   State<StatefulWidget> createState() => SingleVideoPlayerState();
 }
@@ -166,7 +167,7 @@ class SingleVideoPlayerState extends State<_SingleVideoPlayer>{
   @override
   void didUpdateWidget(_SingleVideoPlayer oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.videoUrl != widget.videoUrl) {
+    if (oldWidget.videoUri != widget.videoUri) {
       _chewieController?.dispose();
       _videoPlayerController.dispose();
       _initializePlayer();
@@ -174,7 +175,7 @@ class SingleVideoPlayerState extends State<_SingleVideoPlayer>{
   }
 
   Future<void> _initializePlayer() async{
-    _videoPlayerController = VideoPlayerController.asset(widget.videoUrl);
+    _videoPlayerController = VideoPlayerController.networkUrl(widget.videoUri);
     await _videoPlayerController.initialize();
     await _videoPlayerController.setVolume(0.0);
     _chewieController = ChewieController(

@@ -15,7 +15,7 @@ jobs:
           channel: 'stable'
 
       - name: Build Web
-        run: flutter build web --release --base-href "/"
+        run: flutter build web --wasm --release --base-href "/"
 
       - name: Deploy to Server
         uses: appleboy/scp-action@master

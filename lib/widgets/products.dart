@@ -59,7 +59,7 @@ class _ProductCardState extends State<ProductCard>{
   bool isHover = false;
   @override
   Widget build(BuildContext context) {
-    String image_source = "assets/images/" + widget.image_name;
+    String image_source = "https://khingan.jnl-x.run/assets/assets/images/" + widget.image_name;
     return MouseRegion(
       onEnter: (_) => setState(() => isHover=true),
       onExit: (_) => setState(() => isHover=false),
@@ -101,7 +101,7 @@ class _ProductCardState extends State<ProductCard>{
                   Expanded(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(20),
-                      child: Image.asset(
+                      child: Image.network(
                         image_source,
                         fit: BoxFit.cover,
                       ),
